@@ -65,6 +65,7 @@ class ChatViewController: JSQMessagesViewController {
         let connectedUsername = connectedUserInfo["username"] as! String
         let connectedNumUsers = connectedUserInfo["numUsers"] as! NSNumber
         print("There is \(connectedNumUsers) participants")
+        self.title = "In chat \(connectedNumUsers) persons"
         print("\(connectedUsername) joined the chat")
     }
     
@@ -73,6 +74,7 @@ class ChatViewController: JSQMessagesViewController {
         let disconnectedUsername = disconnectedUserInfo["username"] as! String
         let disconnectedNumUsers = disconnectedUserInfo["numUsers"] as! NSNumber
         print("There is \(disconnectedNumUsers) participants")
+        self.title = "In chat \(disconnectedNumUsers) persons"
         print("\(disconnectedUsername) left the chat")
     }
     
@@ -105,12 +107,14 @@ class ChatViewController: JSQMessagesViewController {
                 self.askForNickname()
             }
             else {
-                self.user.username = textfield.text!
+                self.user = User(username: textfield.text!)
                 self.senderId = self.user.username
                 self.senderDisplayName = self.user.username
                 let user = User(username: self.user.username)
                 SocketIOManager.sharedInstance.connectToServerWithUser(user, completion: { (userList) in
-                    print("In chat \(userList[0]["numUsers"]!) persons")
+                    let numUsers = userList[0]["numUsers"]!
+                    print("In chat \(numUsers) persons")
+                    self.title = "In chat \(numUsers) persons"
                 })
             }
             
@@ -189,14 +193,22 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
+//    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+//        return NSAttributedString(string: "alksdjalksdjaljksd")
+//    }
+//    
+//    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+//        return 22
+//    }
+    
     override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForMessageBubbleTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        
+    
         if indexPath.item == 0 {
             if messages[0].senderDisplayName == self.senderDisplayName {
                 return 0
             }
             else {
-                return 25
+                return 22
             }
         }
         else {
@@ -204,7 +216,7 @@ class ChatViewController: JSQMessagesViewController {
                 return 0
             }
             else {
-                return 25
+                return 22
             }
         }
         

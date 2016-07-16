@@ -14,4 +14,5 @@ class User: NSObject {
     init(username: String) {
         self.username = username
     }
+    
 }

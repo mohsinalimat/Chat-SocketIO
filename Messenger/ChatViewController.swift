@@ -15,7 +15,7 @@ class ChatViewController: JSQMessagesViewController {
     var outgoingBubbleImageView: JSQMessagesBubbleImage!
     var incomingBubbleImageView: JSQMessagesBubbleImage!
     
-    var nickname: String!
+    var user: User!
     var typingUsers = [String]()
     
     override func viewDidLoad() {
@@ -105,11 +105,11 @@ class ChatViewController: JSQMessagesViewController {
                 self.askForNickname()
             }
             else {
-                self.nickname = textfield.text!
-                self.senderId = self.nickname
-                self.senderDisplayName = self.nickname
-                
-                SocketIOManager.sharedInstance.connectToServerWithNickname(self.nickname, completion: { (userList) in
+                self.user.username = textfield.text!
+                self.senderId = self.user.username
+                self.senderDisplayName = self.user.username
+                let user = User(username: self.user.username)
+                SocketIOManager.sharedInstance.connectToServerWithUser(user, completion: { (userList) in
                     print("In chat \(userList[0]["numUsers"]!) persons")
                 })
             }
@@ -219,6 +219,21 @@ class ChatViewController: JSQMessagesViewController {
         SocketIOManager.sharedInstance.sendMessage(text)
         addMessage(senderId, displayName: senderDisplayName, text: text)
         finishSendingMessageAnimated(true)
+    }
+    
+    var timer: NSTimer?
+    
+    override func textViewDidChange(textView: UITextView) {
+        super.textViewDidChange(textView)
+        
+        SocketIOManager.sharedInstance.userIsTyping(user.username)
+        timer?.invalidate()
+        timer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(ChatViewController.userStopped), userInfo: textView, repeats: true)
+    }
+    
+    func userStopped() {
+        timer?.invalidate()
+        SocketIOManager.sharedInstance.userStopTyping(user.username)
     }
 
 }

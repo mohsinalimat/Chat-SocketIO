@@ -26,8 +26,16 @@ class SocketIOManager: NSObject {
         socket.disconnect()
     }
     
-    func connectToServerWithNickname(nickname: String, completion: (userList: [[String: AnyObject]]!) -> Void) {
-        socket.emit("add user", nickname)
+    func userIsTyping(username: String) {
+        socket.emit("typing", username)
+    }
+    
+    func userStopTyping(username: String) {
+        socket.emit("stop typing", username)
+    }
+    
+    func connectToServerWithUser(user: User, completion: (userList: [[String: AnyObject]]!) -> Void) {
+        socket.emit("add user", user.username)
         
         socket.on("login") { (dataArray, ack) in
             completion(userList: dataArray as! [[String: AnyObject]])

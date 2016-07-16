@@ -9,7 +9,7 @@
 import UIKit
 import JSQMessagesViewController
 
-class ViewController: JSQMessagesViewController {
+class ChatViewController: JSQMessagesViewController {
         
     var messages = [JSQMessage]()
     var outgoingBubbleImageView: JSQMessagesBubbleImage!
@@ -51,13 +51,13 @@ class ViewController: JSQMessagesViewController {
     }
     
     func registerNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.userJoinedChat(_:)), name: "userJoinedChat", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.userJoinedChat(_:)), name: "userJoinedChat", object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.userLeftChat(_:)), name: "userLeftChat", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.userLeftChat(_:)), name: "userLeftChat", object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.userIsTyping(_:)), name: "userIsTyping", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.userIsTyping(_:)), name: "userIsTyping", object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.userStopTyping(_:)), name: "userStopTyping", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.userStopTyping(_:)), name: "userStopTyping", object: nil)
     }
     
     func userJoinedChat(notification: NSNotification) {
@@ -97,7 +97,7 @@ class ViewController: JSQMessagesViewController {
     }
 
     func askForNickname() {
-        let alert = UIAlertController(title: "SocketChat", message: "Please, entre your nickname", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Chat", message: "Please, entre your nickname", preferredStyle: .Alert)
         alert.addTextFieldWithConfigurationHandler(nil)
         let okAction = UIAlertAction(title: "Ok", style: .Default) { (action) in
             let textfield = alert.textFields![0]

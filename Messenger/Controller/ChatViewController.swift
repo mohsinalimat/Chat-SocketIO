@@ -26,10 +26,21 @@ class ChatViewController: JSQMessagesViewController {
         setupBubbles()
     }
     
+    var signInTimer: NSTimer?
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        askForNickname()
+        if let username = NSUserDefaults.standardUserDefaults().stringForKey("username") {
+            self.user = User(username: username)
+            self.senderId = self.user.username
+            self.senderDisplayName = self.user.username
+            
+            signInTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(ChatViewController.signInUser), userInfo: self, repeats: true)
+        }
+        else {
+            askForNickname()
+        }
         
         SocketIOManager.sharedInstance.getChatMessage { (message) in
             dispatch_async(dispatch_get_main_queue(), {
@@ -37,6 +48,7 @@ class ChatViewController: JSQMessagesViewController {
                 let text = message["message"] as! String
                 self.addMessage(username, displayName: username, text: text)
                 self.finishReceivingMessageAnimated(true)
+                self.scrollToBottomAnimated(true)
             })
         }
     }
@@ -58,6 +70,18 @@ class ChatViewController: JSQMessagesViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.userIsTyping(_:)), name: "userIsTyping", object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.userStopTyping(_:)), name: "userStopTyping", object: nil)
+    }
+    
+    func signInUser() {
+        SocketIOManager.sharedInstance.connectToServerWithUser(self.user, completion: { (userList) in
+            if self.signInTimer != nil {
+                self.signInTimer!.invalidate()
+            }
+            
+            let numUsers = userList[0]["numUsers"]!
+            print("In chat \(numUsers) persons")
+            self.title = "In chat \(numUsers) persons"
+        })
     }
     
     func userJoinedChat(notification: NSNotification) {
@@ -85,6 +109,7 @@ class ChatViewController: JSQMessagesViewController {
         typingUsers.append(username)
         
         self.showTypingIndicator = typingUsers.count > 0
+        self.scrollToBottomAnimated(true)
     }
     
     func userStopTyping(notification: NSNotification) {
@@ -110,12 +135,10 @@ class ChatViewController: JSQMessagesViewController {
                 self.user = User(username: textfield.text!)
                 self.senderId = self.user.username
                 self.senderDisplayName = self.user.username
-                let user = User(username: self.user.username)
-                SocketIOManager.sharedInstance.connectToServerWithUser(user, completion: { (userList) in
-                    let numUsers = userList[0]["numUsers"]!
-                    print("In chat \(numUsers) persons")
-                    self.title = "In chat \(numUsers) persons"
-                })
+                
+                NSUserDefaults.standardUserDefaults().setObject(self.user.username, forKey: "username")
+                
+                self.signInUser()
             }
             
         }
@@ -231,6 +254,7 @@ class ChatViewController: JSQMessagesViewController {
         SocketIOManager.sharedInstance.sendMessage(text)
         addMessage(senderId, displayName: senderDisplayName, text: text)
         finishSendingMessageAnimated(true)
+        self.scrollToBottomAnimated(true)
     }
     
     var timer: NSTimer?

@@ -40,7 +40,7 @@ class ChatViewController: JSQMessagesViewController {
             self.senderId = self.user.username
             self.senderDisplayName = self.user.username
             
-            signInTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(ChatViewController.signInUser), userInfo: self, repeats: true)
+            signInTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(ChatViewController.signInUser), userInfo: nil, repeats: true)
         }
         else {
             askForNickname()
@@ -97,7 +97,6 @@ class ChatViewController: JSQMessagesViewController {
                     self.addMessage(message.senderId, displayName: message.displayId, text: message.text)
                 }
                 self.finishReceivingMessageAnimated(true)
-//                self.chatGroup.messages.removeAll()
                 
                 print(self.chatGroup.name)
                 
@@ -110,6 +109,12 @@ class ChatViewController: JSQMessagesViewController {
     
     func userJoinedChat(notification: NSNotification) {
         let connectedUserInfo = notification.object as! [String: AnyObject]
+        
+        if connectedUserInfo["username"] == nil {
+            print("no username of typing user. server error")
+            return
+        }
+        
         let connectedUsername = connectedUserInfo["username"] as! String
         let connectedNumUsers = connectedUserInfo["numUsers"] as! NSNumber
         print("There is \(connectedNumUsers) participants")
@@ -119,6 +124,12 @@ class ChatViewController: JSQMessagesViewController {
     
     func userLeftChat(notification: NSNotification) {
         let disconnectedUserInfo = notification.object as! [String: AnyObject]
+        
+        if disconnectedUserInfo["username"] == nil {
+            print("no username of typing user. server error")
+            return
+        }
+        
         let disconnectedUsername = disconnectedUserInfo["username"] as! String
         let disconnectedNumUsers = disconnectedUserInfo["numUsers"] as! NSNumber
         print("There is \(disconnectedNumUsers) participants")
@@ -128,16 +139,37 @@ class ChatViewController: JSQMessagesViewController {
     
     func userIsTyping(notification: NSNotification) {
         let userInfo = notification.object as! [String: AnyObject]
+        
+        if userInfo["username"] == nil {
+            print("no username of typing user. server error")
+            return
+        }
+        
         let username = userInfo["username"] as! String
+        
+        if typingUsers.contains(username) {
+            return
+        }
         
         typingUsers.append(username)
         
-        self.showTypingIndicator = typingUsers.count > 0
-        self.scrollToBottomAnimated(true)
+        self.showTypingIndicator = true
+        
+        for indexPath in self.collectionView.indexPathsForVisibleItems() {
+            if indexPath.item == messages.count-1 {
+                self.scrollToBottomAnimated(true)
+            }
+        }
     }
     
     func userStopTyping(notification: NSNotification) {
         let userInfo = notification.object as! [String: AnyObject]
+        
+        if userInfo["username"] == nil {
+            print("no username of typing user. server error")
+            return
+        }
+        
         let username = userInfo["username"] as! String
         
         if typingUsers.count > 0 {
@@ -280,21 +312,20 @@ class ChatViewController: JSQMessagesViewController {
         SocketIOManager.sharedInstance.sendMessage(text)
         addMessage(senderId, displayName: senderDisplayName, text: text)
         finishSendingMessageAnimated(true)
-        self.scrollToBottomAnimated(true)
     }
     
-    var timer: NSTimer?
+    var typingTimer: NSTimer?
     
     override func textViewDidChange(textView: UITextView) {
         super.textViewDidChange(textView)
         
         SocketIOManager.sharedInstance.userIsTyping(user.username)
-        timer?.invalidate()
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(ChatViewController.userStopped), userInfo: textView, repeats: true)
+        typingTimer?.invalidate()
+        typingTimer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(ChatViewController.userStopped), userInfo: textView, repeats: true)
     }
     
     func userStopped() {
-        timer?.invalidate()
+        typingTimer?.invalidate()
         SocketIOManager.sharedInstance.userStopTyping(user.username)
     }
 

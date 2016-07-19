@@ -9,4 +9,5 @@ target 'Messenger' do
   # Pods for Messenger
   pod 'Socket.IO-Client-Swift', '~> 6.1.4'
   pod 'JSQMessagesViewController'
+  pod 'RealmSwift'
 end

@@ -14,8 +14,10 @@ class ChatViewController: JSQMessagesViewController {
     var messages = [JSQMessage]()
     var outgoingBubbleImageView: JSQMessagesBubbleImage!
     var incomingBubbleImageView: JSQMessagesBubbleImage!
+    let dataManager = DataManager()
     
     var user: User!
+    var chatGroup: ChatGroup!
     var typingUsers = [String]()
     
     override func viewDidLoad() {
@@ -31,8 +33,10 @@ class ChatViewController: JSQMessagesViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        if let username = NSUserDefaults.standardUserDefaults().stringForKey("username") {
-            self.user = User(username: username)
+        if let _ = NSUserDefaults.standardUserDefaults().stringForKey("username") {
+            
+            self.user = dataManager.fetchUser()
+            
             self.senderId = self.user.username
             self.senderDisplayName = self.user.username
             
@@ -51,6 +55,15 @@ class ChatViewController: JSQMessagesViewController {
                 self.scrollToBottomAnimated(true)
             })
         }
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(true)
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        
+        dataManager.removeMessagesFromChatGroup(self.chatGroup)
+        dataManager.saveMessagesInChatGroup(chatGroup, messages: messages)
     }
     
     func configureComponents() {
@@ -78,9 +91,20 @@ class ChatViewController: JSQMessagesViewController {
                 self.signInTimer!.invalidate()
             }
             
-            let numUsers = userList[0]["numUsers"]!
-            print("In chat \(numUsers) persons")
-            self.title = "In chat \(numUsers) persons"
+            self.dataManager.deleteOldMessages({ 
+                self.chatGroup = self.user?.chatGroups.filter(NSPredicate(format: "name == %@", "First chat")).first
+                for message in self.chatGroup.messages {
+                    self.addMessage(message.senderId, displayName: message.displayId, text: message.text)
+                }
+                self.finishReceivingMessageAnimated(true)
+//                self.chatGroup.messages.removeAll()
+                
+                print(self.chatGroup.name)
+                
+                let numUsers = userList[0]["numUsers"]!
+                print("In chat \(numUsers) persons")
+                self.title = "In chat \(numUsers) persons"
+            })
         })
     }
     
@@ -133,6 +157,12 @@ class ChatViewController: JSQMessagesViewController {
             }
             else {
                 self.user = User(username: textfield.text!)
+                let chatGroup = ChatGroup(name: "First chat")
+                
+                self.user.chatGroups.append(chatGroup)
+                self.chatGroup = chatGroup
+                self.dataManager.saveUser(self.user)
+                
                 self.senderId = self.user.username
                 self.senderDisplayName = self.user.username
                 
@@ -157,10 +187,6 @@ class ChatViewController: JSQMessagesViewController {
     func addMessage(id: String, displayName: String, text: String) {
         let message = JSQMessage(senderId: id, displayName: displayName, text: text)
         messages.append(message)
-    }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     //MARK: - Delegate methods

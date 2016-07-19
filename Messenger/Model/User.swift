@@ -2,17 +2,27 @@
 //  User.swift
 //  Messenger
 //
-//  Created by Alexandr on 16.07.16.
+//  Created by Alexandr on 19.07.16.
 //  Copyright © 2016 Alexandr. All rights reserved.
 //
 
-import UIKit
+import Foundation
+import RealmSwift
 
-class User: NSObject {
-    var username: String!
+class User: Object {
     
-    init(username: String) {
+    dynamic var username = ""
+    let chatGroups = List<ChatGroup>()
+    
+    convenience init(username: String) {
+        self.init()
+        
         self.username = username
     }
     
+// Specify properties to ignore (Realm won't persist these)
+    
+//  override static func ignoredProperties() -> [String] {
+//    return []
+//  }
 }

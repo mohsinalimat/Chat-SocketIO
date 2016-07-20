@@ -29,18 +29,18 @@ class DataManager: NSObject {
         })
     }
     
-    func removeMessagesFromChatGroup(chatGroup: ChatGroup) {
+    func removeMessagesFromChat(chat: Chat) {
         try! realm.write({ 
-            chatGroup.messages.removeAll()
+            chat.messages.removeAll()
         })
     }
     
-    func saveMessagesInChatGroup(chatGroup: ChatGroup, messages: [JSQMessage]) {
+    func saveMessagesInChat(chat: Chat, messages: [JSQMessage]) {
         let user = fetchUser()
         try! realm.write({
             for message in messages {
                 let msg = Message(senderId: message.senderId, displayId: message.senderDisplayName, date: message.date, text: message.text)
-                user?.chatGroups.filter(NSPredicate(format: "name == %@", chatGroup.name)).first?.messages.append(msg)
+                user?.chats.filter(NSPredicate(format: "name == %@", chat.name)).first?.messages.append(msg)
             }
         })
     }
@@ -53,8 +53,8 @@ class DataManager: NSObject {
         try! realm.write({ 
             
             let user = fetchUser()
-            for group: ChatGroup in (user?.chatGroups)! {
-                for message: Message in group.messages {
+            for chat: Chat in (user?.chats)! {
+                for message: Message in chat.messages {
                     let messageDate = message.date
                     
                     let components = calendar.components(flag, fromDate: currentDate, toDate: messageDate, options: [])

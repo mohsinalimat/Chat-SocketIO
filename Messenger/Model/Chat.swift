@@ -9,11 +9,11 @@
 import Foundation
 import RealmSwift
 
-class ChatGroup: Object {
+class Chat: Object {
     
     dynamic var name = ""
     let messages = List<Message>()
-    let owners = LinkingObjects(fromType: User.self, property: "chatGroups")
+    let owners = LinkingObjects(fromType: User.self, property: "chats")
     
     convenience init(name: String) {
         self.init()

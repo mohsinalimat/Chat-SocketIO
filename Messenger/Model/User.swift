@@ -12,7 +12,7 @@ import RealmSwift
 class User: Object {
     
     dynamic var username = ""
-    let chatGroups = List<ChatGroup>()
+    let chats = List<Chat>()
     
     convenience init(username: String) {
         self.init()

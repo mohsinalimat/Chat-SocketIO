@@ -12,7 +12,7 @@ import SocketIOClientSwift
 class SocketIOManager: NSObject {
     static let sharedInstance = SocketIOManager()
     
-    var socket = SocketIOClient(socketURL: NSURL(string: "http://ok.dp.ua:3000")!)
+    var socket = SocketIOClient(socketURL: NSURL(string: "http://192.168.1.2:3000")!)
     
     override init() {
         super.init()
@@ -36,7 +36,7 @@ class SocketIOManager: NSObject {
     
     func connectToServerWithUser(user: User, completion: (userList: [[String: AnyObject]]!) -> Void) {
         socket.emit("add user", user.username)
-        
+    
         socket.on("login") { (dataArray, ack) in
             completion(userList: dataArray as! [[String: AnyObject]])
         }

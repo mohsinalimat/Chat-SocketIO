@@ -15,7 +15,7 @@
 		A87395561D3A945800290EA3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87395551D3A945800290EA3 /* ChatViewController.swift */; };
 		A873955D1D3DF0DF00290EA3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A873955C1D3DF0DF00290EA3 /* DataManager.swift */; };
 		A873955F1D3DF19900290EA3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A873955E1D3DF19900290EA3 /* User.swift */; };
-		A87395611D3E0A9400290EA3 /* ChatGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87395601D3E0A9400290EA3 /* ChatGroup.swift */; };
+		A87395611D3E0A9400290EA3 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87395601D3E0A9400290EA3 /* Chat.swift */; };
 		A87395631D3E148300290EA3 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87395621D3E148300290EA3 /* Message.swift */; };
 		A8D6C01F1D37F21E0082E971 /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D6C01E1D37F21E0082E971 /* SocketIOManager.swift */; };
 		F1F31E4E81C5B2A4A8503508 /* Pods_Messenger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD3A3FC2EA844375672ADAF /* Pods_Messenger.framework */; };
@@ -34,7 +34,7 @@
 		A87395551D3A945800290EA3 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		A873955C1D3DF0DF00290EA3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		A873955E1D3DF19900290EA3 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		A87395601D3E0A9400290EA3 /* ChatGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatGroup.swift; sourceTree = "<group>"; };
+		A87395601D3E0A9400290EA3 /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		A87395621D3E148300290EA3 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A8D6C01E1D37F21E0082E971 /* SocketIOManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		DAD3A3FC2EA844375672ADAF /* Pods_Messenger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Messenger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,7 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				A873955E1D3DF19900290EA3 /* User.swift */,
-				A87395601D3E0A9400290EA3 /* ChatGroup.swift */,
+				A87395601D3E0A9400290EA3 /* Chat.swift */,
 				A87395621D3E148300290EA3 /* Message.swift */,
 			);
 			path = Model;
@@ -259,7 +259,7 @@
 				A87395561D3A945800290EA3 /* ChatViewController.swift in Sources */,
 				A873955F1D3DF19900290EA3 /* User.swift in Sources */,
 				A86587CF1D37A78400A212DA /* AppDelegate.swift in Sources */,
-				A87395611D3E0A9400290EA3 /* ChatGroup.swift in Sources */,
+				A87395611D3E0A9400290EA3 /* Chat.swift in Sources */,
 				A87395631D3E148300290EA3 /* Message.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

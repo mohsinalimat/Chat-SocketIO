@@ -17,7 +17,7 @@ class ChatViewController: JSQMessagesViewController {
     let dataManager = DataManager()
     
     var user: User!
-    var chatGroup: ChatGroup!
+    var chat: Chat!
     var typingUsers = [String]()
     
     override func viewDidLoad() {
@@ -62,8 +62,8 @@ class ChatViewController: JSQMessagesViewController {
         
         NSNotificationCenter.defaultCenter().removeObserver(self)
         
-        dataManager.removeMessagesFromChatGroup(self.chatGroup)
-        dataManager.saveMessagesInChatGroup(chatGroup, messages: messages)
+        dataManager.removeMessagesFromChat(self.chat)
+        dataManager.saveMessagesInChat(chat, messages: messages)
     }
     
     func configureComponents() {
@@ -92,13 +92,13 @@ class ChatViewController: JSQMessagesViewController {
             }
             
             self.dataManager.deleteOldMessages({ 
-                self.chatGroup = self.user?.chatGroups.filter(NSPredicate(format: "name == %@", "First chat")).first
-                for message in self.chatGroup.messages {
+                self.chat = self.user?.chats.filter(NSPredicate(format: "name == %@", "First chat")).first
+                for message in self.chat.messages {
                     self.addMessage(message.senderId, displayName: message.displayId, text: message.text)
                 }
                 self.finishReceivingMessageAnimated(true)
                 
-                print(self.chatGroup.name)
+                print(self.chat.name)
                 
                 let numUsers = userList[0]["numUsers"]!
                 print("In chat \(numUsers) persons")
@@ -189,10 +189,10 @@ class ChatViewController: JSQMessagesViewController {
             }
             else {
                 self.user = User(username: textfield.text!)
-                let chatGroup = ChatGroup(name: "First chat")
+                let chat = Chat(name: "First chat")
                 
-                self.user.chatGroups.append(chatGroup)
-                self.chatGroup = chatGroup
+                self.user.chats.append(chat)
+                self.chat = chat
                 self.dataManager.saveUser(self.user)
                 
                 self.senderId = self.user.username
@@ -312,6 +312,10 @@ class ChatViewController: JSQMessagesViewController {
         SocketIOManager.sharedInstance.sendMessage(text)
         addMessage(senderId, displayName: senderDisplayName, text: text)
         finishSendingMessageAnimated(true)
+    }
+    
+    override func didPressAccessoryButton(sender: UIButton!) {
+        print("nothing")
     }
     
     var typingTimer: NSTimer?

@@ -17,7 +17,7 @@ class Message: Object {
     dynamic var data: NSData? = nil
     dynamic var date = NSDate()
     
-    let owners = LinkingObjects(fromType: ChatGroup.self, property: "messages")
+    let owners = LinkingObjects(fromType: Chat.self, property: "messages")
     
     convenience init(senderId: String, displayId: String, date: NSDate, text: String) {
         self.init()

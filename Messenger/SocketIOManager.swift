@@ -9,7 +9,23 @@
 import UIKit
 import SocketIOClientSwift
 
-class SocketIOManager: NSObject {
+protocol ServerServiceProtocol {
+    func establishConnection()
+    
+    func closeConnection()
+    
+    func userStopTyping(username: String)
+    
+    func connectToServerWithUser(user: User, completion: (userList: [[String: AnyObject]]!) -> Void)
+    
+    func listenChatMessage(completion: (message: [String: AnyObject]) -> Void)
+    
+    func sendMessage(message: String)
+    
+    func listenForOtherChatMessages()
+}
+
+class SocketIOManager: NSObject, ServerServiceProtocol {
     static let sharedInstance = SocketIOManager()
     
     var socket = SocketIOClient(socketURL: NSURL(string: "http://192.168.1.2:3000")!)
@@ -44,7 +60,7 @@ class SocketIOManager: NSObject {
         listenForOtherChatMessages()
     }
     
-    func getChatMessage(completion: (message: [String: AnyObject]) -> Void) {
+    func listenChatMessage(completion: (message: [String: AnyObject]) -> Void) {
         socket.on("new message") { (dataArray, ack) in
             let messageDict = dataArray.first as! [String: AnyObject]
             
@@ -56,7 +72,7 @@ class SocketIOManager: NSObject {
         socket.emit("new message", message)
     }
     
-    private func listenForOtherChatMessages() {
+    func listenForOtherChatMessages() {
         socket.on("user joined") { (dataArray, ack) in
             NSNotificationCenter.defaultCenter().postNotificationName("userJoinedChat", object: dataArray[0] as! [String: AnyObject])
         }

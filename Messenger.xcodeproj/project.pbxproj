@@ -13,7 +13,7 @@
 		A86587D91D37A78400A212DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A86587D71D37A78400A212DA /* LaunchScreen.storyboard */; };
 		A87395531D3A945000290EA3 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A87395521D3A945000290EA3 /* ChatViewController.xib */; };
 		A87395561D3A945800290EA3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87395551D3A945800290EA3 /* ChatViewController.swift */; };
-		A873955D1D3DF0DF00290EA3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A873955C1D3DF0DF00290EA3 /* DataManager.swift */; };
+		A873955D1D3DF0DF00290EA3 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A873955C1D3DF0DF00290EA3 /* DataBaseManager.swift */; };
 		A873955F1D3DF19900290EA3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A873955E1D3DF19900290EA3 /* User.swift */; };
 		A87395611D3E0A9400290EA3 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87395601D3E0A9400290EA3 /* Chat.swift */; };
 		A87395631D3E148300290EA3 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87395621D3E148300290EA3 /* Message.swift */; };
@@ -32,7 +32,7 @@
 		A86587DA1D37A78400A212DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A87395521D3A945000290EA3 /* ChatViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatViewController.xib; sourceTree = "<group>"; };
 		A87395551D3A945800290EA3 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
-		A873955C1D3DF0DF00290EA3 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		A873955C1D3DF0DF00290EA3 /* DataBaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
 		A873955E1D3DF19900290EA3 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A87395601D3E0A9400290EA3 /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		A87395621D3E148300290EA3 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -95,7 +95,7 @@
 				A87395541D3A945800290EA3 /* Controller */,
 				A86587CE1D37A78400A212DA /* AppDelegate.swift */,
 				A8D6C01E1D37F21E0082E971 /* SocketIOManager.swift */,
-				A873955C1D3DF0DF00290EA3 /* DataManager.swift */,
+				A873955C1D3DF0DF00290EA3 /* DataBaseManager.swift */,
 				A86587D21D37A78400A212DA /* Main.storyboard */,
 				A86587D51D37A78400A212DA /* Assets.xcassets */,
 				A86587D71D37A78400A212DA /* LaunchScreen.storyboard */,
@@ -254,7 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A873955D1D3DF0DF00290EA3 /* DataManager.swift in Sources */,
+				A873955D1D3DF0DF00290EA3 /* DataBaseManager.swift in Sources */,
 				A8D6C01F1D37F21E0082E971 /* SocketIOManager.swift in Sources */,
 				A87395561D3A945800290EA3 /* ChatViewController.swift in Sources */,
 				A873955F1D3DF19900290EA3 /* User.swift in Sources */,

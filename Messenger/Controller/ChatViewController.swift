@@ -14,7 +14,8 @@ class ChatViewController: JSQMessagesViewController {
     var messages = [JSQMessage]()
     var outgoingBubbleImageView: JSQMessagesBubbleImage!
     var incomingBubbleImageView: JSQMessagesBubbleImage!
-    let dataManager = DataManager()
+    let dataManager = DataBaseManager()
+    var serverService = SocketIOManager.sharedInstance
     
     var user: User!
     var chat: Chat!
@@ -46,7 +47,7 @@ class ChatViewController: JSQMessagesViewController {
             askForNickname()
         }
         
-        SocketIOManager.sharedInstance.getChatMessage { (message) in
+        SocketIOManager.sharedInstance.listenChatMessage { (message) in
             dispatch_async(dispatch_get_main_queue(), {
                 let username = message["username"] as! String
                 let text = message["message"] as! String
@@ -86,7 +87,7 @@ class ChatViewController: JSQMessagesViewController {
     }
     
     func signInUser() {
-        SocketIOManager.sharedInstance.connectToServerWithUser(self.user, completion: { (userList) in
+        serverService.connectToServerWithUser(self.user, completion: { (userList) in
             if self.signInTimer != nil {
                 self.signInTimer!.invalidate()
             }
@@ -309,7 +310,7 @@ class ChatViewController: JSQMessagesViewController {
     }
     
     override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
-        SocketIOManager.sharedInstance.sendMessage(text)
+        serverService.sendMessage(text)
         addMessage(senderId, displayName: senderDisplayName, text: text)
         finishSendingMessageAnimated(true)
     }
@@ -323,14 +324,14 @@ class ChatViewController: JSQMessagesViewController {
     override func textViewDidChange(textView: UITextView) {
         super.textViewDidChange(textView)
         
-        SocketIOManager.sharedInstance.userIsTyping(user.username)
+        serverService.userIsTyping(user.username)
         typingTimer?.invalidate()
         typingTimer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(ChatViewController.userStopped), userInfo: textView, repeats: true)
     }
     
     func userStopped() {
         typingTimer?.invalidate()
-        SocketIOManager.sharedInstance.userStopTyping(user.username)
+        serverService.userStopTyping(user.username)
     }
 
 }

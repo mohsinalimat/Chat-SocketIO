@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import JSQMessagesViewController
 
-class DataManager: NSObject {
+class DataBaseManager: NSObject {
     
     let realm = try! Realm()
  

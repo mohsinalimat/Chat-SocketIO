@@ -2,6 +2,7 @@
 Chat using basic server example https://github.com/socketio/socket.io/tree/master/examples/chat
 
 To test chat u need:
+
 1. Follow instruction https://github.com/socketio/socket.io/tree/master/examples/chat to run server
 2. Write down your IP in class SocketIOManager at line 33
 ```

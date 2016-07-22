@@ -15,7 +15,7 @@ class ChatViewController: JSQMessagesViewController {
     var outgoingBubbleImageView: JSQMessagesBubbleImage!
     var incomingBubbleImageView: JSQMessagesBubbleImage!
     let dataManager = DataBaseManager()
-    var serverService = SocketIOManager.sharedInstance
+    var serverService: ServerServiceProtocol!
     
     var user: User!
     var chat: Chat!
@@ -27,6 +27,8 @@ class ChatViewController: JSQMessagesViewController {
         configureComponents()
         registerNotifications()
         setupBubbles()
+        
+        serverService = SocketIOManager.sharedInstance
     }
     
     var signInTimer: NSTimer?

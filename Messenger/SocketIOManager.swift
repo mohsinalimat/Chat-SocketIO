@@ -14,6 +14,8 @@ protocol ServerServiceProtocol {
     
     func closeConnection()
     
+    func userIsTyping(username: String)
+    
     func userStopTyping(username: String)
     
     func connectToServerWithUser(user: User, completion: (userList: [[String: AnyObject]]!) -> Void)
